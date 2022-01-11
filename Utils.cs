@@ -12,7 +12,7 @@ using System.IO;
 
 namespace CVLabV2
 {
-    class FilePath
+    public class FilePath
     {
         private string _full_path;
         
@@ -159,6 +159,15 @@ namespace CVLabV2
             dst = new();
             dst.X = (float)src.X + (float)src.Width / 2f;
             dst.Y = (float)src.Y + (float)src.Height / 2f;
+        }
+        public static int RoundUp(double d)
+        {
+            int i = (int)d;
+            if(d - (double)i > 0.001d)
+            {
+                i++;
+            }
+            return i;
         }
     }
     

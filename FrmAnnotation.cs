@@ -250,7 +250,26 @@ namespace CVLabV2
         private void FrmAnnotation_KeyUp(object sender, KeyEventArgs e)
         {
             Point cursor = pbMain.PointToClient(Cursor.Position);
-            if (STATES.MODE == USER_MODE.VIEW)
+            if (e.KeyCode == Keys.G)
+            {
+                if (NotDrawingRectangle())
+                {
+                    Rectangle ar = SrcImage.Last_EditMode_Rect;
+                    int x = Math.Max(0, cursor.X - ar.Width / 2);
+                    int y = Math.Max(0, cursor.Y - ar.Height / 2);
+                    Rectangle dupe_rect = new(new Point(x, y), ar.Size);
+                    SrcImage.AddNewAnnotToAnnotsList(dupe_rect, tbAnnotLabel.Text);
+                    if (cbEditModeHideOtherAnnots.Checked)
+                    {
+                        pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_ACTIVE).ToBitmap();
+                    }
+                    else
+                    {
+                        pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_VISIBLE).ToBitmap();
+                    }
+                }
+            }
+            else if (STATES.MODE == USER_MODE.VIEW)
             {
                 if (STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT)
                 {
@@ -278,26 +297,23 @@ namespace CVLabV2
                         {
                             SrcImage.NextInterpMethod();
                         }
-                        else if(e.KeyCode == Keys.G)
-                        {
-                            Rectangle ar = SrcImage.Active_Rect;
-                            int x = Math.Max(0, cursor.X - ar.Width / 2);
-                            int y = Math.Max(0, cursor.Y - ar.Height / 2);
-                            Rectangle dupe_rect = new(new Point(x, y), ar.Size);
-                            SrcImage.AddNewAnnotToAnnotsList(dupe_rect, tbAnnotLabel.Text);
-                            if (cbEditModeHideOtherAnnots.Checked)
-                            {
-                                pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_ACTIVE).ToBitmap();
-                            }
-                            else
-                            {
-                                pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_VISIBLE).ToBitmap();
-                            }
-                        }
                     }
                 }
             }
-            
+        }
+        private bool NotDrawingRectangle()
+        {
+            if(STATES.CURSOR != CURSOR_ACTIVITY.DRAWING_NEW_RECT)
+            {
+                if(STATES.CURSOR != CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
+                {
+                    if(STATES.CURSOR != CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         private Rectangle NudgeRectangle(Rectangle rect, int[] nudge)
         {
@@ -597,7 +613,6 @@ namespace CVLabV2
                 }
             }
         }
-
         private void tbSetAllAnnotsToVisible_Click(object sender, EventArgs e)
         {
             if(SrcImage.Annots.Count > 0)
@@ -608,7 +623,6 @@ namespace CVLabV2
                 }
             }
         }
-
         private void btnSetAllAnnotsToNotVisible_Click(object sender, EventArgs e)
         {
             if(SrcImage.Annots.Count > 0)
@@ -618,6 +632,11 @@ namespace CVLabV2
                     a.Visible = false;
                 }
             }
+        }
+        private void btnLoadDataPrep_Click(object sender, EventArgs e)
+        {
+            FrmDataPrep DataPrepForm = new();
+            DataPrepForm.Show();
         }
     }
 }
