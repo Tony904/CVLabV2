@@ -91,7 +91,6 @@ namespace CVLabV2
         {
             string txt_file = _src_path.FullPathMinusExt + ".txt";
             string s = String.Empty;
-            string[] split;
             if (File.Exists(txt_file))
             {
                 using (StreamReader sr = File.OpenText(txt_file))
@@ -108,6 +107,7 @@ namespace CVLabV2
                 AnnotationForm.rtbLastActivity.Text = "Found associated txt file.\nLoaded existing annotations.";
                 _UpdateNonTempImages();
                 SetZoomedAnnotationImage();
+                Last_EditMode_Rect = Active_Rect;
             }
         }
         private static void InitializeMembers()

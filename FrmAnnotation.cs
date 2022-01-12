@@ -26,12 +26,13 @@ namespace CVLabV2
             tbState.Text = STATES.CURSOR.ToString();
             SrcImage.SetFrmAnnotationReference(this);
             tbInterpolationMethod.Text = SrcImage.Interp_Method.ToString();
+            pbMain.Cursor = GetCursorTypeFromComboBox();
         }
         private void btnLoadImageSrc_Click(object sender, EventArgs e)
         {
             SrcImage.SetSrcImageFromFile();
             pbMain.Enabled = true;
-            pbMain.Cursor = Cursors.Cross;
+            pbMain.Cursor = GetCursorTypeFromComboBox();
             pbMain.Image = SrcImage.Src.ToBitmap();
         }
         private void pbMain_MouseClick(object sender, MouseEventArgs e)
@@ -78,12 +79,18 @@ namespace CVLabV2
             {
                 if(e.Button == MouseButtons.Left)
                 {
-                    STATES.MODE = USER_MODE.VIEW;
+                    STATES.MODE = USER_MODE.EDIT;
                     STATES.CURSOR = CURSOR_ACTIVITY.NONE;
                     Rectangle new_rect = SrcImage.GetCreateModeTempRect(cursor);
                     SrcImage.AddNewAnnotToAnnotsList(new_rect, tbAnnotLabel.Text);
-                    pbMain.Image = SrcImage.Image_OnlyVisible.ToBitmap();
-                    DrawAnnotsAsCrossesIfChecked();
+                    if (cbEditModeHideOtherAnnots.Checked)
+                    {
+                        pbMain.Image = SrcImage.Image_OnlyActive.ToBitmap();
+                    }
+                    else
+                    {
+                        pbMain.Image = SrcImage.Image_OnlyVisible.ToBitmap();
+                    }
                 }
             }
             else if(STATES.MODE == USER_MODE.EDIT)
@@ -99,7 +106,7 @@ namespace CVLabV2
                     else if(STATES.CURSOR == CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
                     {
                         STATES.CURSOR = CURSOR_ACTIVITY.NONE;
-                        pbMain.Cursor = Cursors.Cross;
+                        pbMain.Cursor = GetCursorTypeFromComboBox();
                         Point temp_pnt = new(cursor.X - SrcImage.Cursor_Offset.X, cursor.Y - SrcImage.Cursor_Offset.Y);
                         Size temp_size = new(SrcImage.Active_Rect.Width, SrcImage.Active_Rect.Height);
                         SrcImage.Active_Rect = new(temp_pnt, temp_size);
@@ -124,7 +131,7 @@ namespace CVLabV2
                     else if(STATES.CURSOR == CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
                     {
                         STATES.CURSOR = CURSOR_ACTIVITY.NONE;
-                        pbMain.Cursor = Cursors.Cross;
+                        pbMain.Cursor = GetCursorTypeFromComboBox();
                         if (cbEditModeHideOtherAnnots.Checked)
                         {
                             pbMain.Image = SrcImage.GetTempImageWithScaledRect(cursor, IMAGE_BASE.ALL_HIDDEN).ToBitmap();
@@ -228,7 +235,7 @@ namespace CVLabV2
                 else
                 {
                     STATES.CURSOR = CURSOR_ACTIVITY.NONE;
-                    pbMain.Cursor = Cursors.Cross;
+                    pbMain.Cursor = GetCursorTypeFromComboBox();
                     if (cbEditModeHideOtherAnnots.Checked)
                     {
                         default_img = IMAGE_BASE.ONLY_ACTIVE; 
@@ -267,6 +274,7 @@ namespace CVLabV2
                     {
                         pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_VISIBLE).ToBitmap();
                     }
+                    STATES.MODE = USER_MODE.EDIT;
                 }
             }
             else if (STATES.MODE == USER_MODE.VIEW)
@@ -555,7 +563,6 @@ namespace CVLabV2
                 cbForceIntegerScaling.Enabled = true;
             }
         }
-
         private void cbShowAnnotsAsCrosses_CheckedChanged(object sender, EventArgs e)
         {
             DrawAnnotsAsCrossesIfChecked();
@@ -582,7 +589,7 @@ namespace CVLabV2
                                 float w = (float)a.GrabRect.Width;
                                 float h = (float)a.GrabRect.Height;
                                 Cross2DF c = new(p, w, h);
-                                img.Draw(c, Colors.Red, 3);
+                                img.Draw(c, Colors.Red, 1);
                             }
                         }
                         pbMain.Image = img.ToBitmap();
@@ -638,5 +645,22 @@ namespace CVLabV2
             FrmDataPrep DataPrepForm = new();
             DataPrepForm.Show();
         }
+        private Cursor GetCursorTypeFromComboBox()
+        {
+            string s = cbCursorType.Text;
+            if(s == "Pointer")
+            {
+                return Cursors.Arrow;
+            }
+            else if(s == "Cross")
+            {
+                return Cursors.Cross;
+            }
+            else
+            {
+                return Cursors.Arrow;
+            }
+        }
     }
+    
 }

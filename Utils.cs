@@ -57,7 +57,7 @@ namespace CVLabV2
             get
             {
                 int index = _full_path.LastIndexOf('\\');
-                string outpt = _full_path.Remove(index);
+                string outpt = _full_path.Remove(index + 1);
                 return outpt;
             }
         }

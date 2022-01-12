@@ -29,6 +29,8 @@ namespace CVLabV2
                 DataPrep.SrcPath = new(ofd.FileName);
                 pbModifyImage.Image = DataPrep.Src.ToBitmap();
                 rtbActivity.Text = "File Loaded.\n" + DataPrep.SrcPath.FullPath;
+                tbLoadImageWidth.Text = DataPrep.Src.Width.ToString();
+                tbLoadImageHeight.Text = DataPrep.Src.Height.ToString();
             }
         }
         private void btnModifyImages_Click(object sender, EventArgs e)
@@ -57,7 +59,32 @@ namespace CVLabV2
         {
             if (DataPrep.SrcPath.FullPath.Any())
             {
-                DataPrep.CurrentModifiedImage.Save(DataPrep.SrcPath.FullPathMinusExt + "MODIFIED.jpg");
+                string suffix = tbFilenameSuffix.Text;
+                DataPrep.CurrentModifiedImage.Save(DataPrep.SrcPath.FullPathMinusExt + suffix + ".jpg");
+            }
+        }
+
+        private void btnNumberFiles_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                FilePath folder = new(ofd.FileName);
+                string dir = folder.Directory.Remove(folder.Directory.Length - 1);
+                string suffix = tbNumberFileSuffix.Text;
+                int i = 1;
+                foreach (var file in Directory.EnumerateFiles(dir, "*.jpg"))
+                {
+                    Image<Bgr, byte> img = new(file);
+                    FilePath name_test = new(folder.Directory + i.ToString() + suffix + ".jpg");
+                    string new_name = name_test.FullPath;
+                    if(File.Exists(name_test.FullPath))
+                    {
+                        new_name = name_test.FullPathMinusExt + "COPY" + ".jpg";
+                    }
+                    img.Save(new_name);
+                    i++;
+                }
             }
         }
     }
