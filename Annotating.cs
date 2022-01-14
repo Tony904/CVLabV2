@@ -22,7 +22,11 @@ namespace CVLabV2
         {
             get => _src.Clone();
         }
-        private static FilePath _src_path;
+        private static FilePath _src_path = new(String.Empty);
+        public static FilePath SrcPath
+        {
+            get => _src_path;
+        }
         public static List<Annot> Annots = new();
 
         private static int _next_uid = 0;
@@ -521,12 +525,13 @@ namespace CVLabV2
         private static Image<Bgr, byte> GetOuterSubImage(int pb_width, int pb_height)
         {
             Rectangle ar = Active_Rect;
-            int x = ar.X - ar.Width / 2;
+            int i = GetScopedOutSubImageValue();
+            int x = ar.X - ar.Width / i;
             x = Math.Max(0, x);
-            int y = ar.Y - ar.Height / 2;
+            int y = ar.Y - ar.Height / i;
             y = Math.Max(0, y);
-            int w = Active_Rect.Width * 2;
-            int h = Active_Rect.Height * 2;
+            int w = ar.Width + (ar.Width / i) * 2;
+            int h = ar.Height + (ar.Height / i) * 2;
             if(x + w > Src.Width)
             {
                 int d = x + w - Src.Width;
@@ -565,6 +570,19 @@ namespace CVLabV2
             }
             Image<Bgr, byte> rimg = sub_img.Resize(scale, Interp_Method);
             return rimg;
+        }
+        private static int GetScopedOutSubImageValue()
+        {
+            string s = AnnotationForm.cbScopeOutAmount.Text;
+            if(s == "2x")
+            {
+                return 2;
+            }
+            else if (s == "3x")
+            {
+                return 1;
+            }
+            return 2;
         }
         public static void NextInterpMethod()
         {

@@ -40,13 +40,15 @@ namespace CVLabV2
             this.clbAnnots = new System.Windows.Forms.CheckedListBox();
             this.rtbLastActivity = new System.Windows.Forms.RichTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbCursorType = new System.Windows.Forms.ComboBox();
             this.cbUseCustomUpScaling = new System.Windows.Forms.CheckBox();
-            this.tbAnnotLabel = new System.Windows.Forms.TextBox();
             this.btnSetAllAnnotsToNotVisible = new System.Windows.Forms.Button();
             this.tbSetAllAnnotsToVisible = new System.Windows.Forms.Button();
             this.cbForceIntegerScaling = new System.Windows.Forms.CheckBox();
             this.cbShowAnnotsAsCrosses = new System.Windows.Forms.CheckBox();
             this.cbEditModeHideOtherAnnots = new System.Windows.Forms.CheckBox();
+            this.tbAnnotLabel = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -63,9 +65,11 @@ namespace CVLabV2
             this.tbInterpolationMethod = new System.Windows.Forms.TextBox();
             this.btnLoadDataPrep = new System.Windows.Forms.Button();
             this.pbOuterView = new System.Windows.Forms.PictureBox();
-            this.cbCursorType = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.cbScopeOutAmount = new System.Windows.Forms.ComboBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.tbSrcFile = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -77,6 +81,8 @@ namespace CVLabV2
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOuterView)).BeginInit();
             this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbMain
@@ -115,15 +121,15 @@ namespace CVLabV2
             // 
             this.tbCursorPosition.Location = new System.Drawing.Point(6, 22);
             this.tbCursorPosition.Name = "tbCursorPosition";
-            this.tbCursorPosition.Size = new System.Drawing.Size(253, 23);
+            this.tbCursorPosition.Size = new System.Drawing.Size(249, 23);
             this.tbCursorPosition.TabIndex = 3;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.tbCursorPosition);
-            this.groupBox1.Location = new System.Drawing.Point(12, 72);
+            this.groupBox1.Location = new System.Drawing.Point(956, 415);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(265, 56);
+            this.groupBox1.Size = new System.Drawing.Size(261, 56);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Cursor Position";
@@ -131,7 +137,7 @@ namespace CVLabV2
             // pbZoomedSubImage
             // 
             this.pbZoomedSubImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbZoomedSubImage.Location = new System.Drawing.Point(12, 134);
+            this.pbZoomedSubImage.Location = new System.Drawing.Point(12, 71);
             this.pbZoomedSubImage.Name = "pbZoomedSubImage";
             this.pbZoomedSubImage.Size = new System.Drawing.Size(265, 265);
             this.pbZoomedSubImage.TabIndex = 5;
@@ -140,7 +146,7 @@ namespace CVLabV2
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.tbActiveRect);
-            this.groupBox2.Location = new System.Drawing.Point(12, 676);
+            this.groupBox2.Location = new System.Drawing.Point(12, 622);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(265, 53);
             this.groupBox2.TabIndex = 6;
@@ -157,17 +163,17 @@ namespace CVLabV2
             // clbAnnots
             // 
             this.clbAnnots.FormattingEnabled = true;
-            this.clbAnnots.Location = new System.Drawing.Point(956, 534);
+            this.clbAnnots.Location = new System.Drawing.Point(956, 565);
             this.clbAnnots.Name = "clbAnnots";
-            this.clbAnnots.Size = new System.Drawing.Size(261, 112);
+            this.clbAnnots.Size = new System.Drawing.Size(261, 94);
             this.clbAnnots.TabIndex = 7;
             // 
             // rtbLastActivity
             // 
             this.rtbLastActivity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtbLastActivity.Location = new System.Drawing.Point(956, 652);
+            this.rtbLastActivity.Location = new System.Drawing.Point(956, 665);
             this.rtbLastActivity.Name = "rtbLastActivity";
-            this.rtbLastActivity.Size = new System.Drawing.Size(261, 77);
+            this.rtbLastActivity.Size = new System.Drawing.Size(261, 64);
             this.rtbLastActivity.TabIndex = 8;
             this.rtbLastActivity.Text = "";
             // 
@@ -188,6 +194,27 @@ namespace CVLabV2
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 140);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(42, 15);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Cursor";
+            // 
+            // cbCursorType
+            // 
+            this.cbCursorType.FormattingEnabled = true;
+            this.cbCursorType.Items.AddRange(new object[] {
+            "Pointer",
+            "Cross"});
+            this.cbCursorType.Location = new System.Drawing.Point(55, 137);
+            this.cbCursorType.Name = "cbCursorType";
+            this.cbCursorType.Size = new System.Drawing.Size(112, 23);
+            this.cbCursorType.TabIndex = 8;
+            this.cbCursorType.Text = "Pointer";
+            // 
             // cbUseCustomUpScaling
             // 
             this.cbUseCustomUpScaling.AutoSize = true;
@@ -202,14 +229,6 @@ namespace CVLabV2
             this.cbUseCustomUpScaling.Text = "Use Custom Up-Scaling";
             this.cbUseCustomUpScaling.UseVisualStyleBackColor = false;
             this.cbUseCustomUpScaling.CheckedChanged += new System.EventHandler(this.cbUseCustomUpScaling_CheckedChanged);
-            // 
-            // tbAnnotLabel
-            // 
-            this.tbAnnotLabel.Location = new System.Drawing.Point(6, 22);
-            this.tbAnnotLabel.Name = "tbAnnotLabel";
-            this.tbAnnotLabel.Size = new System.Drawing.Size(105, 23);
-            this.tbAnnotLabel.TabIndex = 5;
-            this.tbAnnotLabel.Text = "0";
             // 
             // btnSetAllAnnotsToNotVisible
             // 
@@ -268,6 +287,14 @@ namespace CVLabV2
             this.cbEditModeHideOtherAnnots.Text = "Hide Others In Edit Mode";
             this.cbEditModeHideOtherAnnots.UseVisualStyleBackColor = true;
             this.cbEditModeHideOtherAnnots.CheckedChanged += new System.EventHandler(this.cbEditModeHideOtherAnnots_CheckedChanged);
+            // 
+            // tbAnnotLabel
+            // 
+            this.tbAnnotLabel.Location = new System.Drawing.Point(6, 22);
+            this.tbAnnotLabel.Name = "tbAnnotLabel";
+            this.tbAnnotLabel.Size = new System.Drawing.Size(62, 23);
+            this.tbAnnotLabel.TabIndex = 5;
+            this.tbAnnotLabel.Text = "0";
             // 
             // groupBox4
             // 
@@ -362,7 +389,7 @@ namespace CVLabV2
             // 
             this.groupBox5.Controls.Add(this.tbState);
             this.groupBox5.Controls.Add(this.tbUserMode);
-            this.groupBox5.Location = new System.Drawing.Point(956, 388);
+            this.groupBox5.Location = new System.Drawing.Point(956, 477);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(261, 82);
             this.groupBox5.TabIndex = 13;
@@ -386,9 +413,9 @@ namespace CVLabV2
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.tbInterpolationMethod);
-            this.groupBox6.Location = new System.Drawing.Point(956, 476);
+            this.groupBox6.Location = new System.Drawing.Point(96, 678);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(261, 52);
+            this.groupBox6.Size = new System.Drawing.Size(181, 51);
             this.groupBox6.TabIndex = 14;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Interpolation Method";
@@ -397,12 +424,12 @@ namespace CVLabV2
             // 
             this.tbInterpolationMethod.Location = new System.Drawing.Point(6, 22);
             this.tbInterpolationMethod.Name = "tbInterpolationMethod";
-            this.tbInterpolationMethod.Size = new System.Drawing.Size(249, 23);
+            this.tbInterpolationMethod.Size = new System.Drawing.Size(169, 23);
             this.tbInterpolationMethod.TabIndex = 15;
             // 
             // btnLoadDataPrep
             // 
-            this.btnLoadDataPrep.Location = new System.Drawing.Point(185, 43);
+            this.btnLoadDataPrep.Location = new System.Drawing.Point(185, 42);
             this.btnLoadDataPrep.Name = "btnLoadDataPrep";
             this.btnLoadDataPrep.Size = new System.Drawing.Size(92, 23);
             this.btnLoadDataPrep.TabIndex = 15;
@@ -413,52 +440,77 @@ namespace CVLabV2
             // pbOuterView
             // 
             this.pbOuterView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbOuterView.Location = new System.Drawing.Point(12, 405);
+            this.pbOuterView.Location = new System.Drawing.Point(12, 351);
             this.pbOuterView.Name = "pbOuterView";
             this.pbOuterView.Size = new System.Drawing.Size(265, 265);
             this.pbOuterView.TabIndex = 16;
             this.pbOuterView.TabStop = false;
             // 
-            // cbCursorType
-            // 
-            this.cbCursorType.FormattingEnabled = true;
-            this.cbCursorType.Items.AddRange(new object[] {
-            "Pointer",
-            "Cross"});
-            this.cbCursorType.Location = new System.Drawing.Point(55, 137);
-            this.cbCursorType.Name = "cbCursorType";
-            this.cbCursorType.Size = new System.Drawing.Size(112, 23);
-            this.cbCursorType.TabIndex = 8;
-            this.cbCursorType.Text = "Pointer";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 140);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(42, 15);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Cursor";
-            // 
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.tbAnnotLabel);
-            this.groupBox7.Location = new System.Drawing.Point(956, 327);
+            this.groupBox7.Location = new System.Drawing.Point(956, 316);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(261, 55);
+            this.groupBox7.Size = new System.Drawing.Size(74, 56);
             this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Class ID";
+            // 
+            // cbScopeOutAmount
+            // 
+            this.cbScopeOutAmount.FormattingEnabled = true;
+            this.cbScopeOutAmount.Items.AddRange(new object[] {
+            "2x",
+            "3x"});
+            this.cbScopeOutAmount.Location = new System.Drawing.Point(6, 22);
+            this.cbScopeOutAmount.MaxDropDownItems = 2;
+            this.cbScopeOutAmount.Name = "cbScopeOutAmount";
+            this.cbScopeOutAmount.Size = new System.Drawing.Size(66, 23);
+            this.cbScopeOutAmount.TabIndex = 18;
+            this.cbScopeOutAmount.Text = "2x";
+            this.cbScopeOutAmount.SelectedIndexChanged += new System.EventHandler(this.cbScopeOutAmount_SelectedIndexChanged);
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.cbScopeOutAmount);
+            this.groupBox8.Location = new System.Drawing.Point(12, 678);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(78, 51);
+            this.groupBox8.TabIndex = 1;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Scope-out";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.tbSrcFile);
+            this.groupBox9.Location = new System.Drawing.Point(1036, 316);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(181, 56);
+            this.groupBox9.TabIndex = 18;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "File";
+            // 
+            // tbSrcFile
+            // 
+            this.tbSrcFile.Location = new System.Drawing.Point(6, 22);
+            this.tbSrcFile.Name = "tbSrcFile";
+            this.tbSrcFile.ReadOnly = true;
+            this.tbSrcFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.tbSrcFile.Size = new System.Drawing.Size(169, 23);
+            this.tbSrcFile.TabIndex = 0;
             // 
             // FrmAnnotation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1229, 734);
+            this.Controls.Add(this.groupBox9);
+            this.Controls.Add(this.groupBox8);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.pbOuterView);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.btnLoadDataPrep);
             this.Controls.Add(this.rtbLastActivity);
             this.Controls.Add(this.clbAnnots);
@@ -468,7 +520,6 @@ namespace CVLabV2
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.pbZoomedSubImage);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnLoadImageSrc);
             this.KeyPreview = true;
@@ -497,6 +548,9 @@ namespace CVLabV2
             ((System.ComponentModel.ISupportInitialize)(this.pbOuterView)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -540,6 +594,10 @@ namespace CVLabV2
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cbCursorType;
         private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox8;
+        public System.Windows.Forms.ComboBox cbScopeOutAmount;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.TextBox tbSrcFile;
     }
 }
 

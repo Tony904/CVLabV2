@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Emgu.CV;
-using Emgu.Util;
+﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace CVLabV2
 {
@@ -27,22 +20,28 @@ namespace CVLabV2
             SrcImage.SetFrmAnnotationReference(this);
             tbInterpolationMethod.Text = SrcImage.Interp_Method.ToString();
             pbMain.Cursor = GetCursorTypeFromComboBox();
+            panel1.Focus();
         }
         private void btnLoadImageSrc_Click(object sender, EventArgs e)
         {
             SrcImage.SetSrcImageFromFile();
-            pbMain.Enabled = true;
-            pbMain.Cursor = GetCursorTypeFromComboBox();
-            pbMain.Image = SrcImage.Src.ToBitmap();
+            if(SrcImage.SrcPath.FullPath != String.Empty)
+            {
+                tbSrcFile.Text = SrcImage.SrcPath.FullPath;
+                pbMain.Enabled = true;
+                pbMain.Cursor = GetCursorTypeFromComboBox();
+                pbMain.Image = SrcImage.Src.ToBitmap();
+            }
+            
         }
         private void pbMain_MouseClick(object sender, MouseEventArgs e)
         {
             Point cursor = pbMain.PointToClient(Cursor.Position);
             tbCursorPosition.Text = cursor.ToString();
 
-            if(STATES.MODE == USER_MODE.VIEW)
+            if (STATES.MODE == USER_MODE.VIEW)
             {
-                if(e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left)
                 {
                     STATES.MODE = USER_MODE.CREATE;
                     STATES.CURSOR = CURSOR_ACTIVITY.DRAWING_NEW_RECT;
@@ -56,9 +55,9 @@ namespace CVLabV2
                         pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_VISIBLE).ToBitmap();
                     }
                 }
-                else if(e.Button == MouseButtons.Right)
+                else if (e.Button == MouseButtons.Right)
                 {
-                    if(STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT)
+                    if (STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT)
                     {
                         STATES.MODE = USER_MODE.EDIT;
                         STATES.CURSOR = CURSOR_ACTIVITY.NONE;
@@ -75,9 +74,9 @@ namespace CVLabV2
                     }
                 }
             }
-            else if(STATES.MODE == USER_MODE.CREATE)
+            else if (STATES.MODE == USER_MODE.CREATE)
             {
-                if(e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left)
                 {
                     STATES.MODE = USER_MODE.EDIT;
                     STATES.CURSOR = CURSOR_ACTIVITY.NONE;
@@ -93,9 +92,9 @@ namespace CVLabV2
                     }
                 }
             }
-            else if(STATES.MODE == USER_MODE.EDIT)
+            else if (STATES.MODE == USER_MODE.EDIT)
             {
-                if(e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left)
                 {
                     if (STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT)
                     {
@@ -103,7 +102,7 @@ namespace CVLabV2
                         Rectangle rect = SrcImage.Active_Rect;
                         SrcImage.Cursor_Offset = new(cursor.X - rect.X, cursor.Y - rect.Y);
                     }
-                    else if(STATES.CURSOR == CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
+                    else if (STATES.CURSOR == CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
                     {
                         STATES.CURSOR = CURSOR_ACTIVITY.NONE;
                         pbMain.Cursor = GetCursorTypeFromComboBox();
@@ -120,7 +119,7 @@ namespace CVLabV2
                             pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.ONLY_VISIBLE).ToBitmap();
                         }
                     }
-                    else if(STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_PNT)
+                    else if (STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_PNT)
                     {
                         STATES.CURSOR = CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT;
                         SrcImage._AdjustActiveRectByGrabPnt(out Cursor cursor_type);
@@ -128,7 +127,7 @@ namespace CVLabV2
                         Rectangle rect = SrcImage.Active_Rect;
                         SrcImage.Cursor_Offset = new(cursor.X - rect.X, cursor.Y - rect.Y);
                     }
-                    else if(STATES.CURSOR == CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
+                    else if (STATES.CURSOR == CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
                     {
                         STATES.CURSOR = CURSOR_ACTIVITY.NONE;
                         pbMain.Cursor = GetCursorTypeFromComboBox();
@@ -143,16 +142,16 @@ namespace CVLabV2
                         SrcImage.UpdateActiveAnnotWithActiveRect();
                     }
                 }
-                else if(e.Button == MouseButtons.Right)
+                else if (e.Button == MouseButtons.Right)
                 {
-                    if(STATES.CURSOR == CURSOR_ACTIVITY.NONE)
+                    if (STATES.CURSOR == CURSOR_ACTIVITY.NONE)
                     {
                         STATES.MODE = USER_MODE.VIEW;
                         pbMain.Image = SrcImage.Image_OnlyVisible.ToBitmap();
                         DrawAnnotsAsCrossesIfChecked();
                     }
                 }
-                
+
             }
         }
 
@@ -162,9 +161,9 @@ namespace CVLabV2
             tbCursorPosition.Text = cursor.ToString();
             IMAGE_BASE default_img = IMAGE_BASE.NO_CHANGE;
 
-            if(STATES.MODE == USER_MODE.CREATE)
+            if (STATES.MODE == USER_MODE.CREATE)
             {
-                if(STATES.CURSOR == CURSOR_ACTIVITY.DRAWING_NEW_RECT)
+                if (STATES.CURSOR == CURSOR_ACTIVITY.DRAWING_NEW_RECT)
                 {
                     Rectangle temp_rect = SrcImage.GetCreateModeTempRect(cursor);
                     SrcImage.Active_Rect = temp_rect;
@@ -178,10 +177,10 @@ namespace CVLabV2
                     }
                 }
             }
-            else if(STATES.MODE == USER_MODE.VIEW)
+            else if (STATES.MODE == USER_MODE.VIEW)
             {
                 int index;
-                if(SrcImage.IsPointInAnyGrabRect(cursor, out index))
+                if (SrcImage.IsPointInAnyGrabRect(cursor, out index))
                 {
                     STATES.CURSOR = CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT;
                     SrcImage.Active_Annots_Index = index;
@@ -193,9 +192,9 @@ namespace CVLabV2
                     default_img = IMAGE_BASE.ONLY_VISIBLE;
                 }
             }
-            else if(STATES.MODE == USER_MODE.EDIT)
+            else if (STATES.MODE == USER_MODE.EDIT)
             {
-                if(STATES.CURSOR == CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
+                if (STATES.CURSOR == CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
                 {
                     Point temp_pnt = new(cursor.X - SrcImage.Cursor_Offset.X, cursor.Y - SrcImage.Cursor_Offset.Y);
                     Size temp_size = new(SrcImage.Active_Rect.Width, SrcImage.Active_Rect.Height);
@@ -209,7 +208,7 @@ namespace CVLabV2
                         pbMain.Image = SrcImage.GetTempImageWithTempRect(IMAGE_BASE.MINUS_ACTIVE).ToBitmap();
                     }
                 }
-                else if(STATES.CURSOR == CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
+                else if (STATES.CURSOR == CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
                 {
                     if (cbEditModeHideOtherAnnots.Checked)
                     {
@@ -227,7 +226,7 @@ namespace CVLabV2
                     SrcImage.Active_GrabPnt_Index = grabp;
                     pbMain.Image = SrcImage.GetHighlightedGrabPntImage().ToBitmap();
                 }
-                else if(SrcImage.IsPointInActiveGrabRect(cursor))
+                else if (SrcImage.IsPointInActiveGrabRect(cursor))
                 {
                     STATES.CURSOR = CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT;
                     pbMain.Cursor = Cursors.SizeAll;
@@ -238,7 +237,7 @@ namespace CVLabV2
                     pbMain.Cursor = GetCursorTypeFromComboBox();
                     if (cbEditModeHideOtherAnnots.Checked)
                     {
-                        default_img = IMAGE_BASE.ONLY_ACTIVE; 
+                        default_img = IMAGE_BASE.ONLY_ACTIVE;
                     }
                     else
                     {
@@ -247,7 +246,7 @@ namespace CVLabV2
                 }
             }
             //Default image for pbMain if not changed.
-            if(default_img != IMAGE_BASE.NO_CHANGE)
+            if (default_img != IMAGE_BASE.NO_CHANGE)
             {
                 pbMain.Image = SrcImage.GetImageByEnum(default_img).ToBitmap();
                 DrawAnnotsAsCrossesIfChecked();
@@ -288,14 +287,14 @@ namespace CVLabV2
                     }
                 }
             }
-            else if(STATES.MODE == USER_MODE.EDIT)
+            else if (STATES.MODE == USER_MODE.EDIT)
             {
-                if(STATES.CURSOR != CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
+                if (STATES.CURSOR != CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
                 {
-                    if(STATES.CURSOR != CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
+                    if (STATES.CURSOR != CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
                     {
                         int[] nudge; //left,top,right,bottom
-                        if(KeyIsQWERorASDF(e.KeyCode, out nudge))
+                        if (KeyIsQWERorASDF(e.KeyCode, out nudge))
                         {
                             SrcImage.Active_Rect = NudgeRectangle(SrcImage.Active_Rect, nudge);
                             SrcImage.UpdateActiveAnnotWithActiveRect();
@@ -311,11 +310,11 @@ namespace CVLabV2
         }
         private bool NotDrawingRectangle()
         {
-            if(STATES.CURSOR != CURSOR_ACTIVITY.DRAWING_NEW_RECT)
+            if (STATES.CURSOR != CURSOR_ACTIVITY.DRAWING_NEW_RECT)
             {
-                if(STATES.CURSOR != CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
+                if (STATES.CURSOR != CURSOR_ACTIVITY.SCALING_BY_GRAB_PNT)
                 {
-                    if(STATES.CURSOR != CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
+                    if (STATES.CURSOR != CURSOR_ACTIVITY.DRAGGING_BY_GRAB_RECT)
                     {
                         return true;
                     }
@@ -325,21 +324,21 @@ namespace CVLabV2
         }
         private Rectangle NudgeRectangle(Rectangle rect, int[] nudge)
         {
-            if(nudge[0] != 0) //left
+            if (nudge[0] != 0) //left
             {
                 rect.X -= nudge[0];
                 rect.Width += nudge[0];
             }
-            else if(nudge[1] != 0) //top
+            else if (nudge[1] != 0) //top
             {
                 rect.Y -= nudge[1];
                 rect.Height += nudge[1];
             }
-            else if(nudge[2] != 0)
+            else if (nudge[2] != 0)
             {
                 rect.Width += nudge[2];
             }
-            else if(nudge[3] != 0)
+            else if (nudge[3] != 0)
             {
                 rect.Height += nudge[3];
             }
@@ -347,7 +346,7 @@ namespace CVLabV2
         }
         private bool KeyIsQWERorASDF(Keys e, out int[] nudge)
         {
-            nudge = new int[]{ 0, 0, 0, 0 };
+            nudge = new int[] { 0, 0, 0, 0 };
             bool b = true;
             switch (e)
             {
@@ -393,9 +392,9 @@ namespace CVLabV2
         private Cursor GetScalingCursorByTopLeftPosition(Rectangle rect)
         {
             Cursor c;
-            if(rect.Width > 0)
+            if (rect.Width > 0)
             {
-                if(rect.Height > 0)
+                if (rect.Height > 0)
                 {
                     //Top-left
                     c = Cursors.PanNW;
@@ -408,7 +407,7 @@ namespace CVLabV2
             }
             else
             {
-                if(rect.Height > 0)
+                if (rect.Height > 0)
                 {
                     //Top-right
                     c = Cursors.PanNE;
@@ -435,7 +434,7 @@ namespace CVLabV2
                     SrcImage.SaveAnnotationsToTxtFile();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
@@ -529,7 +528,7 @@ namespace CVLabV2
 
         private void cbForceIntegerScaling_CheckedChanged(object sender, EventArgs e)
         {
-            if(SrcImage.Annots.Count > 0)
+            if (SrcImage.Annots.Count > 0)
             {
                 SrcImage.SetZoomedAnnotationImage();
             }
@@ -543,12 +542,12 @@ namespace CVLabV2
                 cbUseCustomUpScaling.ForeColor = Color.Black;
                 cbUseCustomUpScaling.Enabled = true;
             }
-            
+
         }
 
         private void cbUseCustomUpScaling_CheckedChanged(object sender, EventArgs e)
         {
-            if(SrcImage.Annots.Count > 0)
+            if (SrcImage.Annots.Count > 0)
             {
                 SrcImage.SetZoomedAnnotationImage();
             }
@@ -622,9 +621,9 @@ namespace CVLabV2
         }
         private void tbSetAllAnnotsToVisible_Click(object sender, EventArgs e)
         {
-            if(SrcImage.Annots.Count > 0)
+            if (SrcImage.Annots.Count > 0)
             {
-                foreach(Annot a in SrcImage.Annots)
+                foreach (Annot a in SrcImage.Annots)
                 {
                     a.Visible = true;
                 }
@@ -632,9 +631,9 @@ namespace CVLabV2
         }
         private void btnSetAllAnnotsToNotVisible_Click(object sender, EventArgs e)
         {
-            if(SrcImage.Annots.Count > 0)
+            if (SrcImage.Annots.Count > 0)
             {
-                foreach(Annot a in SrcImage.Annots)
+                foreach (Annot a in SrcImage.Annots)
                 {
                     a.Visible = false;
                 }
@@ -648,19 +647,25 @@ namespace CVLabV2
         private Cursor GetCursorTypeFromComboBox()
         {
             string s = cbCursorType.Text;
-            if(s == "Pointer")
+            if (s == "Pointer")
             {
                 return Cursors.Arrow;
             }
-            else if(s == "Cross")
+            else if (s == "Cross")
             {
                 return Cursors.Cross;
             }
-            else
+            return Cursors.Arrow;
+        }
+
+        private void cbScopeOutAmount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SrcImage.Annots.Count > 0)
             {
-                return Cursors.Arrow;
+                SrcImage.SetZoomedAnnotationImage();
             }
+            pbMain.Focus();
         }
     }
-    
+
 }

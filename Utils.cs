@@ -15,7 +15,6 @@ namespace CVLabV2
     public class FilePath
     {
         private string _full_path;
-        
         public string FullPath
         {
             get
@@ -40,7 +39,7 @@ namespace CVLabV2
                 int end_index = _full_path.LastIndexOf('.');
                 int length = end_index - start_index - 2;
                 string outpt = _full_path.Substring(start_index + 1, length);
-                return outpt;                
+                return outpt;
             }
         }
         public string FileNamePlusExt
