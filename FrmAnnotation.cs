@@ -25,7 +25,7 @@ namespace CVLabV2
         private void btnLoadImageSrc_Click(object sender, EventArgs e)
         {
             SrcImage.SetSrcImageFromFile();
-            if(SrcImage.SrcPath.FullPath != String.Empty)
+            if (SrcImage.SrcPath.FullPath != String.Empty)
             {
                 tbSrcFile.Text = SrcImage.SrcPath.FullPath;
                 pbMain.Enabled = true;

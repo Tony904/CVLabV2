@@ -81,14 +81,22 @@ namespace CVLabV2
         /// </summary>
         public static void SetSrcImageFromFile()
         {
-            OpenFileDialog ofd = new();
-            if (ofd.ShowDialog() == DialogResult.OK)
+            try
             {
-                _src = new(ofd.FileName);
-                _src_path = new(ofd.FileName);
-                InitializeMembers();
-                STATES.InitializeMembers();
-                CheckForExistingTxtFile();
+                OpenFileDialog ofd = new();
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    string fname = ofd.FileName;
+                    _src = new(fname);
+                    _src_path = new(fname);
+                    InitializeMembers();
+                    STATES.InitializeMembers();
+                    CheckForExistingTxtFile();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
         public static void CheckForExistingTxtFile()
@@ -117,6 +125,7 @@ namespace CVLabV2
         private static void InitializeMembers()
         {
             Annots = new();
+            UpdateClbAnnots();
             _next_uid = 0;
             _active_annots_index = -1;
             Active_GrabPnt_Index = -1;
@@ -246,9 +255,12 @@ namespace CVLabV2
         private static void UpdateClbAnnots()
         {
             AnnotationForm.clbAnnots.Items.Clear();
-            foreach(Annot a in Annots)
+            if(Annots.Count > 0)
             {
-                AnnotationForm.clbAnnots.Items.Add(a.GetClbString(), a.Visible);
+                foreach (Annot a in Annots)
+                {
+                    AnnotationForm.clbAnnots.Items.Add(a.GetClbString(), a.Visible);
+                }
             }
         }
         public static Image<Bgr, byte> GetBaseImageByOptions()
@@ -564,9 +576,17 @@ namespace CVLabV2
                 dst.Draw(rect, Colors.Red);
                 return dst.Clone();
             }
-            if (AnnotationForm.cbForceIntegerScaling.Checked)
+            else if (AnnotationForm.cbForceIntegerScaling.Checked)
             {
                 scale = (double)((int)scale);
+                Image<Bgr, byte> dst = sub_img.Resize(scale, Interp_Method);
+                int iscale = (int)scale;
+                rect.X *= iscale;
+                rect.Y *= iscale;
+                rect.Width *= iscale;
+                rect.Height *= iscale;
+                dst.Draw(rect, Colors.Red);
+                return dst.Clone();
             }
             Image<Bgr, byte> rimg = sub_img.Resize(scale, Interp_Method);
             return rimg;
