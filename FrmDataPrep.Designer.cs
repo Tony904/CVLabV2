@@ -59,12 +59,18 @@ namespace CVLabV2
             this.tbNumberFileSuffix = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tbClassToChangeTo = new System.Windows.Forms.TextBox();
+            this.btnChangeClassInTxt = new System.Windows.Forms.Button();
+            this.btnRotateAnnotations = new System.Windows.Forms.Button();
+            this.btnCreateTrainAndTestTxt = new System.Windows.Forms.Button();
             this.pnlModifiedImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbModifyImage)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnModifyImages
@@ -109,7 +115,7 @@ namespace CVLabV2
             this.tbDstImageWidth.Name = "tbDstImageWidth";
             this.tbDstImageWidth.Size = new System.Drawing.Size(74, 23);
             this.tbDstImageWidth.TabIndex = 4;
-            this.tbDstImageWidth.Text = "512";
+            this.tbDstImageWidth.Text = "704";
             // 
             // tbDstImageHeight
             // 
@@ -117,7 +123,7 @@ namespace CVLabV2
             this.tbDstImageHeight.Name = "tbDstImageHeight";
             this.tbDstImageHeight.Size = new System.Drawing.Size(78, 23);
             this.tbDstImageHeight.TabIndex = 5;
-            this.tbDstImageHeight.Text = "512";
+            this.tbDstImageHeight.Text = "704";
             // 
             // label3
             // 
@@ -354,11 +360,62 @@ namespace CVLabV2
             this.label9.TabIndex = 2;
             this.label9.Text = "Suffix";
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.tbClassToChangeTo);
+            this.groupBox5.Controls.Add(this.btnChangeClassInTxt);
+            this.groupBox5.Location = new System.Drawing.Point(766, 192);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(151, 106);
+            this.groupBox5.TabIndex = 18;
+            this.groupBox5.TabStop = false;
+            // 
+            // tbClassToChangeTo
+            // 
+            this.tbClassToChangeTo.Location = new System.Drawing.Point(6, 73);
+            this.tbClassToChangeTo.Name = "tbClassToChangeTo";
+            this.tbClassToChangeTo.Size = new System.Drawing.Size(139, 23);
+            this.tbClassToChangeTo.TabIndex = 1;
+            this.tbClassToChangeTo.Text = "0";
+            // 
+            // btnChangeClassInTxt
+            // 
+            this.btnChangeClassInTxt.Location = new System.Drawing.Point(6, 15);
+            this.btnChangeClassInTxt.Name = "btnChangeClassInTxt";
+            this.btnChangeClassInTxt.Size = new System.Drawing.Size(139, 49);
+            this.btnChangeClassInTxt.TabIndex = 0;
+            this.btnChangeClassInTxt.Text = "Change Class ID For All Annotations In Txt File";
+            this.btnChangeClassInTxt.UseVisualStyleBackColor = true;
+            this.btnChangeClassInTxt.Click += new System.EventHandler(this.btnChangeClassInTxt_Click);
+            // 
+            // btnRotateAnnotations
+            // 
+            this.btnRotateAnnotations.Location = new System.Drawing.Point(766, 326);
+            this.btnRotateAnnotations.Name = "btnRotateAnnotations";
+            this.btnRotateAnnotations.Size = new System.Drawing.Size(151, 41);
+            this.btnRotateAnnotations.TabIndex = 19;
+            this.btnRotateAnnotations.Text = "Create Rotated Images With Annotations";
+            this.btnRotateAnnotations.UseVisualStyleBackColor = true;
+            this.btnRotateAnnotations.Click += new System.EventHandler(this.btnRotateAnnotations_Click);
+            // 
+            // btnCreateTrainAndTestTxt
+            // 
+            this.btnCreateTrainAndTestTxt.Location = new System.Drawing.Point(766, 399);
+            this.btnCreateTrainAndTestTxt.Name = "btnCreateTrainAndTestTxt";
+            this.btnCreateTrainAndTestTxt.Size = new System.Drawing.Size(151, 42);
+            this.btnCreateTrainAndTestTxt.TabIndex = 20;
+            this.btnCreateTrainAndTestTxt.Text = "Create train.txt and test.txt";
+            this.btnCreateTrainAndTestTxt.UseVisualStyleBackColor = true;
+            this.btnCreateTrainAndTestTxt.Click += new System.EventHandler(this.btnCreateTrainAndTestTxt_Click);
+            // 
             // FrmDataPrep
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(929, 588);
+            this.Controls.Add(this.btnCreateTrainAndTestTxt);
+            this.Controls.Add(this.btnRotateAnnotations);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -379,6 +436,8 @@ namespace CVLabV2
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -415,5 +474,10 @@ namespace CVLabV2
         private System.Windows.Forms.TextBox tbNumberFileSuffix;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TextBox tbClassToChangeTo;
+        private System.Windows.Forms.Button btnChangeClassInTxt;
+        private System.Windows.Forms.Button btnRotateAnnotations;
+        private System.Windows.Forms.Button btnCreateTrainAndTestTxt;
     }
 }

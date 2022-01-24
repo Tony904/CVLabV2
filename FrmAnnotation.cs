@@ -1,8 +1,14 @@
-﻿using Emgu.CV;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Emgu.CV;
+using Emgu.Util;
 using Emgu.CV.Structure;
-using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace CVLabV2
 {
@@ -276,6 +282,25 @@ namespace CVLabV2
                     STATES.MODE = USER_MODE.EDIT;
                 }
             }
+            else if(e.KeyCode == Keys.H)
+            {
+                if (NotDrawingRectangle())
+                {
+                    STATES.MODE = USER_MODE.EDIT;
+                    STATES.CURSOR = CURSOR_ACTIVITY.NONE;
+                    SrcImage.Active_Annots_Index = clbAnnots.SelectedIndex;
+                    SrcImage._UpdateNonTempImages();
+                    SrcImage.SetZoomedAnnotationImage();
+                    if (cbEditModeHideOtherAnnots.Checked)
+                    {
+                        pbMain.Image = SrcImage.Image_OnlyActive.ToBitmap();
+                    }
+                    else
+                    {
+                        pbMain.Image = SrcImage.Image_OnlyVisible.ToBitmap();
+                    }
+                }
+            }
             else if (STATES.MODE == USER_MODE.VIEW)
             {
                 if (STATES.CURSOR == CURSOR_ACTIVITY.HOVERING_OVER_GRAB_RECT)
@@ -523,7 +548,56 @@ namespace CVLabV2
 
         private void btnDrawLastDarknetPrediction_Click(object sender, EventArgs e)
         {
-            GenerateSpecialTestImage();
+            ParseResultsTxt();
+        }
+        private void ParseResultsTxt()
+        {
+            string results_txt = "D:/yolo_v4/darknet/build/darknet/x64/results.txt";
+            using (StreamReader sr = File.OpenText(results_txt))
+            {
+                int n = 0;
+                string s = String.Empty;
+                //List<string[]> BBoxes = new();
+                int uid = 0;
+                bool do_once = true;
+                while ((s = sr.ReadLine()) != null)
+                {
+                    if (do_once)
+                    {
+                        if (s.Contains("Predicted in"))
+                        {
+                            string img_path = s.Substring(s.LastIndexOf('/') + 1, s.IndexOf(':') - s.LastIndexOf('/') - 1);
+                            img_path = "D:/yolo_v4/darknet/build/darknet/x64/data/manual_testing/" + img_path;
+                            SrcImage.SetSrcImageFromStr(img_path);
+                            do_once = false;
+                        }
+                    }
+                    if (s.Contains("left_x:"))
+                    {
+                        string[] split = s.Split(':'); //arr[0]=label, arr[1]=prob, arr[2]=xLeft, arr[3]=yTop, arr[4]=w, arr[5]=h
+                        string label = split[0];
+                        label = label.Trim();
+                        string prob = split[1].Remove(split[1].IndexOf('%'));
+                        prob = prob.Trim();
+                        string leftx = split[2].Remove(split[2].IndexOf('t'));
+                        leftx = leftx.Trim();
+                        string topy = split[3].Remove(split[3].IndexOf('w'));
+                        topy = topy.Trim();
+                        string wd = split[4].Remove(split[4].IndexOf('h'));
+                        wd = wd.Trim();
+                        string ht = split[5].Remove(split[5].IndexOf(')'));
+                        ht = ht.Trim();
+
+                        string lbl = label + "(" + prob + "%)";
+                        int x = Int32.Parse(leftx);
+                        int y = Int32.Parse(topy);
+                        int w = Int32.Parse(wd);
+                        int h = Int32.Parse(ht);
+                        Rectangle rect = new(x, y, w, h);
+                        SrcImage.AddNewAnnotToAnnotsList(rect, lbl);
+                    }
+                }
+            }
         }
 
         private void cbForceIntegerScaling_CheckedChanged(object sender, EventArgs e)
@@ -623,9 +697,17 @@ namespace CVLabV2
         {
             if (SrcImage.Annots.Count > 0)
             {
-                foreach (Annot a in SrcImage.Annots)
+                if (NotDrawingRectangle())
                 {
-                    a.Visible = true;
+                    int i = 0;
+                    foreach (Annot a in SrcImage.Annots)
+                    {
+                        a.Visible = true;
+                        clbAnnots.SetItemChecked(i, true);
+                        i++;
+                    }
+                    SrcImage._UpdateNonTempImages();
+                    pbMain.Image = SrcImage.GetBaseImageByOptions().ToBitmap();
                 }
             }
         }
@@ -633,9 +715,18 @@ namespace CVLabV2
         {
             if (SrcImage.Annots.Count > 0)
             {
-                foreach (Annot a in SrcImage.Annots)
+                if (NotDrawingRectangle())
                 {
-                    a.Visible = false;
+                    int i = 0;
+                    foreach (Annot a in SrcImage.Annots)
+                    {
+                        a.Visible = false;
+                        clbAnnots.SetItemChecked(i, false);
+                        i++;
+                    }
+                    SrcImage._UpdateNonTempImages();
+                    pbMain.Image = SrcImage.GetBaseImageByOptions().ToBitmap();
+                    rtbLastActivity.Text = "Annots set to Invisible.";
                 }
             }
         }
@@ -644,7 +735,7 @@ namespace CVLabV2
             FrmDataPrep DataPrepForm = new();
             DataPrepForm.Show();
         }
-        private Cursor GetCursorTypeFromComboBox()
+        public Cursor GetCursorTypeFromComboBox()
         {
             string s = cbCursorType.Text;
             if (s == "Pointer")
@@ -665,6 +756,89 @@ namespace CVLabV2
                 SrcImage.SetZoomedAnnotationImage();
             }
             pbMain.Focus();
+        }
+
+        private void tbAnnotLabel_MouseLeave(object sender, EventArgs e)
+        {
+            if (tbAnnotLabel.Focused)
+            {
+                panel1.Focus();
+            }
+        }
+
+        private void pbMain_MouseEnter(object sender, EventArgs e)
+        {
+            pbMain.Focus();
+        }
+
+        private void clbAnnots_MouseEnter(object sender, EventArgs e)
+        {
+            clbAnnots.Focus();
+        }
+
+        private void clbAnnots_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (pbMain.Enabled)
+            {
+                int si;
+                try
+                {
+                    si = clbAnnots.SelectedIndex;
+                }
+                catch (Exception ex)
+                {
+                    si = -2;
+                }
+                tbSelectedClbIndex.Text = si.ToString();
+                if(si > -1)
+                {
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        
+                    }
+                    else if(e.Button == MouseButtons.Left)
+                    {
+                        clbAnnots_GVars.clb_si_checked = clbAnnots.GetItemChecked(si);
+                    }
+                }
+            }
+        }
+        private void clbAnnots_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int si;
+            try
+            {
+                si = clbAnnots.SelectedIndex;
+            }
+            catch (Exception ex)
+            {
+                si = -2;
+            }
+            if(si == clbAnnots_GVars.last_si & si != -1)
+            {
+                if (clbAnnots.GetItemChecked(si) != clbAnnots_GVars.clb_si_checked) //true if SelectedIndex was actually changed with the most recent mouse click.
+                {
+                    SrcImage.Annots[si].Visible = clbAnnots.GetItemChecked(si);
+                    SrcImage._UpdateNonTempImages();
+                    if (NotDrawingRectangle())
+                    {
+                        pbMain.Image = SrcImage.GetBaseImageByOptions().ToBitmap();
+                    }
+                }
+            }
+            clbAnnots_GVars.last_si = si;
+        }
+        private static class clbAnnots_GVars
+        {
+            public static bool clb_si_checked;
+            public static int last_si = -2;
+        }
+
+        private void clbAnnots_MouseLeave(object sender, EventArgs e)
+        {
+            pbMain.Focus();
+            clbAnnots.ClearSelected();
+            tbSelectedClbIndex.Text = clbAnnots.SelectedIndex.ToString();
         }
     }
 

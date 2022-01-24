@@ -56,7 +56,7 @@ namespace CVLabV2
             get => _active_rect;
             set
             {
-                AnnotationForm.tbActiveRect.Text = CustomToString.RectToString(value);
+                AnnotationForm.tbActiveRect.Text = CustomToString.RectToString(value) + " [index:" + _active_annots_index.ToString() + "]";
                 _active_rect = value;
             }
         }
@@ -98,6 +98,18 @@ namespace CVLabV2
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+        public static void SetSrcImageFromStr(string img_fullpath)
+        {
+            string fname = img_fullpath;
+            _src = new(fname);
+            _src_path = new(fname);
+            InitializeMembers();
+            STATES.InitializeMembers();
+            AnnotationForm.tbSrcFile.Text = SrcImage.SrcPath.FullPath;
+            AnnotationForm.pbMain.Enabled = true;
+            AnnotationForm.pbMain.Cursor = AnnotationForm.GetCursorTypeFromComboBox();
+            AnnotationForm.pbMain.Image = SrcImage.Src.ToBitmap();
         }
         public static void CheckForExistingTxtFile()
         {
@@ -252,7 +264,7 @@ namespace CVLabV2
             SetZoomedAnnotationImage();
             AnnotationForm.rtbLastActivity.Text = "Modified Annotation: " + Active_Annots_Index.ToString();
         }
-        private static void UpdateClbAnnots()
+        public static void UpdateClbAnnots()
         {
             AnnotationForm.clbAnnots.Items.Clear();
             if(Annots.Count > 0)
@@ -756,6 +768,37 @@ namespace CVLabV2
             string line = Label + " " + X.ToString() + " " + Y.ToString() + " " + W.ToString() + " " + H.ToString() + "\n";
             return line;
         }
+        public List<string> GetRotatedBBoxes()
+        {
+            List<string> rotations = new();
+
+            float[] rb90 = GetRotatedBBox90Deg(X, Y, W, H);
+            string line = Label + " " + rb90[0].ToString() + " " + rb90[1].ToString() + " " + rb90[2].ToString() + " " + rb90[3].ToString();
+            rotations.Add(line);
+
+            float[] rb180 = GetRotatedBBox90Deg(rb90[0], rb90[1], rb90[2], rb90[3]);
+            line = Label + " " + rb180[0].ToString() + " " + rb180[1].ToString() + " " + rb180[2].ToString() + " " + rb180[3].ToString();
+            rotations.Add(line);
+
+            float[] rb270 = GetRotatedBBox90Deg(rb180[0], rb180[1], rb180[2], rb180[3]);
+            line = Label + " " + rb270[0].ToString() + " " + rb270[1].ToString() + " " + rb270[2].ToString() + " " + rb270[3].ToString();
+            rotations.Add(line);
+
+            return rotations;
+        }
+        private static float[] GetRotatedBBox90Deg(float x, float y, float w, float h)
+        {
+            float shift_X = x - 0.5f;
+            float shift_y = (y - 0.5f) * -1f;
+
+            float rx = shift_y + 0.5f;
+            float ry = ((shift_X * -1f) - 0.5f) * -1f;
+            float rw = h;
+            float rh = w;
+
+            float[] rbbox = { rx, ry, rw, rh };
+            return rbbox;
+        }
     }
 
     static class STATES
@@ -774,7 +817,7 @@ namespace CVLabV2
                 }
                 else
                 {
-                    SrcImage.AnnotationForm.tbUserMode.BackColor = Color.White;
+                    SrcImage.AnnotationForm.tbUserMode.BackColor = Color.WhiteSmoke;
                 }
             }
         }
