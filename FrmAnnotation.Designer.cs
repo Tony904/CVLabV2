@@ -50,6 +50,8 @@ namespace CVLabV2
             this.cbEditModeHideOtherAnnots = new System.Windows.Forms.CheckBox();
             this.tbAnnotLabel = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.tbSelectedClbIndex = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -70,8 +72,7 @@ namespace CVLabV2
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.tbSrcFile = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.tbSelectedClbIndex = new System.Windows.Forms.TextBox();
+            this.tbCrossThickness = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -190,6 +191,7 @@ namespace CVLabV2
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.tbCrossThickness);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.cbCursorType);
             this.groupBox3.Controls.Add(this.cbUseCustomUpScaling);
@@ -324,6 +326,23 @@ namespace CVLabV2
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Controls";
+            // 
+            // tbSelectedClbIndex
+            // 
+            this.tbSelectedClbIndex.Location = new System.Drawing.Point(190, 117);
+            this.tbSelectedClbIndex.Name = "tbSelectedClbIndex";
+            this.tbSelectedClbIndex.ReadOnly = true;
+            this.tbSelectedClbIndex.Size = new System.Drawing.Size(47, 23);
+            this.tbSelectedClbIndex.TabIndex = 7;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 122);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(181, 15);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "[H] Edit Selected CLB Annotation";
             // 
             // label6
             // 
@@ -517,22 +536,13 @@ namespace CVLabV2
             this.tbSrcFile.Size = new System.Drawing.Size(169, 23);
             this.tbSrcFile.TabIndex = 0;
             // 
-            // label7
+            // tbCrossThickness
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 122);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(181, 15);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "[H] Edit Selected CLB Annotation";
-            // 
-            // tbSelectedClbIndex
-            // 
-            this.tbSelectedClbIndex.Location = new System.Drawing.Point(190, 117);
-            this.tbSelectedClbIndex.Name = "tbSelectedClbIndex";
-            this.tbSelectedClbIndex.ReadOnly = true;
-            this.tbSelectedClbIndex.Size = new System.Drawing.Size(47, 23);
-            this.tbSelectedClbIndex.TabIndex = 7;
+            this.tbCrossThickness.Location = new System.Drawing.Point(190, 92);
+            this.tbCrossThickness.Name = "tbCrossThickness";
+            this.tbCrossThickness.Size = new System.Drawing.Size(47, 23);
+            this.tbCrossThickness.TabIndex = 10;
+            this.tbCrossThickness.Text = "1";
             // 
             // FrmAnnotation
             // 
@@ -634,6 +644,7 @@ namespace CVLabV2
         public System.Windows.Forms.PictureBox pbMain;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbSelectedClbIndex;
+        private System.Windows.Forms.TextBox tbCrossThickness;
     }
 }
 

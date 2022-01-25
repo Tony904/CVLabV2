@@ -87,7 +87,9 @@ namespace CVLabV2
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     string fname = ofd.FileName;
-                    _src = new(fname);
+                    Image<Bgr, byte> og = new(fname);
+                    Image<Bgr, byte> resized = og.Resize(4d, Emgu.CV.CvEnum.Inter.Cubic);
+                    _src = resized.Clone();
                     _src_path = new(fname);
                     InitializeMembers();
                     STATES.InitializeMembers();
@@ -266,12 +268,22 @@ namespace CVLabV2
         }
         public static void UpdateClbAnnots()
         {
-            AnnotationForm.clbAnnots.Items.Clear();
-            if(Annots.Count > 0)
+            int i = 0;
+            int count = AnnotationForm.clbAnnots.Items.Count;
+            if (Annots.Count > 0)
             {
                 foreach (Annot a in Annots)
                 {
-                    AnnotationForm.clbAnnots.Items.Add(a.GetClbString(), a.Visible);
+                    if(i < count)
+                    {
+                        AnnotationForm.clbAnnots.Items[i] = a.GetClbString();
+                        AnnotationForm.clbAnnots.SetItemChecked(i, a.Visible);
+                        i++;
+                    }
+                    else
+                    {
+                        AnnotationForm.clbAnnots.Items.Add(a.GetClbString(), a.Visible);
+                    }
                 }
             }
         }
@@ -299,13 +311,9 @@ namespace CVLabV2
                     return Image_OnlyVisible.Clone();
                 }
             }
-            else if(STATES.MODE == USER_MODE.VIEW)
+            else //if(STATES.MODE == USER_MODE.VIEW)
             {
                 return Image_OnlyVisible.Clone();
-            }
-            else
-            {
-                return new Image<Bgr, byte>(100, 100, Colors.Gray);
             }
         }
         public static bool IsPointInAnyGrabRect(Point p, out int Annot_Index)
@@ -510,8 +518,8 @@ namespace CVLabV2
         {
             Annots.RemoveAt(Active_Annots_Index);
             AnnotationForm.rtbLastActivity.Text = "Annotation deleted: " + Active_Annots_Index.ToString();
+            AnnotationForm.clbAnnots.Items.RemoveAt(Active_Annots_Index);
             Active_Annots_Index = 0;
-            UpdateClbAnnots();
             _UpdateNonTempImages();
         }
         public static void SetZoomedAnnotationImage()

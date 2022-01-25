@@ -286,18 +286,21 @@ namespace CVLabV2
             {
                 if (NotDrawingRectangle())
                 {
-                    STATES.MODE = USER_MODE.EDIT;
-                    STATES.CURSOR = CURSOR_ACTIVITY.NONE;
-                    SrcImage.Active_Annots_Index = clbAnnots.SelectedIndex;
-                    SrcImage._UpdateNonTempImages();
-                    SrcImage.SetZoomedAnnotationImage();
-                    if (cbEditModeHideOtherAnnots.Checked)
+                    if(clbAnnots.SelectedIndex > -1)
                     {
-                        pbMain.Image = SrcImage.Image_OnlyActive.ToBitmap();
-                    }
-                    else
-                    {
-                        pbMain.Image = SrcImage.Image_OnlyVisible.ToBitmap();
+                        STATES.MODE = USER_MODE.EDIT;
+                        STATES.CURSOR = CURSOR_ACTIVITY.NONE;
+                        SrcImage.Active_Annots_Index = clbAnnots.SelectedIndex;
+                        SrcImage._UpdateNonTempImages();
+                        SrcImage.SetZoomedAnnotationImage();
+                        if (cbEditModeHideOtherAnnots.Checked)
+                        {
+                            pbMain.Image = SrcImage.Image_OnlyActive.ToBitmap();
+                        }
+                        else
+                        {
+                            pbMain.Image = SrcImage.Image_OnlyVisible.ToBitmap();
+                        }
                     }
                 }
             }
@@ -321,9 +324,12 @@ namespace CVLabV2
                         int[] nudge; //left,top,right,bottom
                         if (KeyIsQWERorASDF(e.KeyCode, out nudge))
                         {
+                            //Point scroll = panel1.AutoScrollPosition;
                             SrcImage.Active_Rect = NudgeRectangle(SrcImage.Active_Rect, nudge);
                             SrcImage.UpdateActiveAnnotWithActiveRect();
+                            
                             pbMain.Image = SrcImage.GetBaseImageByOptions().ToBitmap();
+                            //panel1.AutoScrollPosition = scroll;
                         }
                         else if (e.KeyCode == Keys.T)
                         {
@@ -662,7 +668,16 @@ namespace CVLabV2
                                 float w = (float)a.GrabRect.Width;
                                 float h = (float)a.GrabRect.Height;
                                 Cross2DF c = new(p, w, h);
-                                img.Draw(c, Colors.Red, 1);
+                                int thickness;
+                                try
+                                {
+                                    thickness = Int32.Parse(tbCrossThickness.Text);
+                                }
+                                catch (Exception ex)
+                                {
+                                    thickness = 1;
+                                }
+                                img.Draw(c, Colors.Red, thickness);
                             }
                         }
                         pbMain.Image = img.ToBitmap();
@@ -755,7 +770,7 @@ namespace CVLabV2
             {
                 SrcImage.SetZoomedAnnotationImage();
             }
-            pbMain.Focus();
+            panel1.Focus();
         }
 
         private void tbAnnotLabel_MouseLeave(object sender, EventArgs e)
@@ -768,7 +783,7 @@ namespace CVLabV2
 
         private void pbMain_MouseEnter(object sender, EventArgs e)
         {
-            pbMain.Focus();
+            panel1.Focus();
         }
 
         private void clbAnnots_MouseEnter(object sender, EventArgs e)
@@ -836,7 +851,6 @@ namespace CVLabV2
 
         private void clbAnnots_MouseLeave(object sender, EventArgs e)
         {
-            pbMain.Focus();
             clbAnnots.ClearSelected();
             tbSelectedClbIndex.Text = clbAnnots.SelectedIndex.ToString();
         }
