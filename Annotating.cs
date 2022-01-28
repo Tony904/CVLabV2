@@ -88,7 +88,12 @@ namespace CVLabV2
                 {
                     string fname = ofd.FileName;
                     Image<Bgr, byte> og = new(fname);
-                    Image<Bgr, byte> resized = og.Resize(4d, Emgu.CV.CvEnum.Inter.Cubic);
+                    if(og.Width != og.Height)
+                    {
+                        MessageBox.Show("Warning: The dimensions of the image are not square. Darknet will squish the image.");
+                    }
+                    double scale = (double)Math.Max(1, AnnotationForm.cbLoadImageScale.SelectedIndex + 1);
+                    Image<Bgr, byte> resized = og.Resize(scale, Emgu.CV.CvEnum.Inter.Cubic);
                     _src = resized.Clone();
                     _src_path = new(fname);
                     InitializeMembers();

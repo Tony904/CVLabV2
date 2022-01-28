@@ -269,6 +269,12 @@ namespace CVLabV2
                     Rectangle ar = SrcImage.Last_EditMode_Rect;
                     int x = Math.Max(0, cursor.X - ar.Width / 2);
                     int y = Math.Max(0, cursor.Y - ar.Height / 2);
+                    int w_offset = Math.Max(1, (int)((float)ar.Width * 0.05f));
+                    int h_offset = Math.Max(1, (int)((float)ar.Height * 0.05f));
+                    x = Math.Max(0, x - w_offset);
+                    y = Math.Max(0, y - h_offset);
+                    ar.Width += w_offset * 2;
+                    ar.Height += h_offset * 2;
                     Rectangle dupe_rect = new(new Point(x, y), ar.Size);
                     SrcImage.AddNewAnnotToAnnotsList(dupe_rect, tbAnnotLabel.Text);
                     if (cbEditModeHideOtherAnnots.Checked)

@@ -58,12 +58,17 @@ namespace CVLabV2
             this.btnNumberFiles = new System.Windows.Forms.Button();
             this.tbNumberFileSuffix = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tbNumberFilePrefix = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tbClassToChangeTo = new System.Windows.Forms.TextBox();
             this.btnChangeClassInTxt = new System.Windows.Forms.Button();
             this.btnRotateAnnotations = new System.Windows.Forms.Button();
             this.btnCreateTrainAndTestTxt = new System.Windows.Forms.Button();
+            this.btnAdjustBBoxesToSquaredImage = new System.Windows.Forms.Button();
+            this.btnSquareAllImages = new System.Windows.Forms.Button();
+            this.btnGenerateEmptyTxtFiles = new System.Windows.Forms.Button();
             this.pnlModifiedImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbModifyImage)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -335,26 +340,44 @@ namespace CVLabV2
             // 
             // tbNumberFileSuffix
             // 
-            this.tbNumberFileSuffix.Location = new System.Drawing.Point(6, 98);
+            this.tbNumberFileSuffix.Location = new System.Drawing.Point(6, 143);
             this.tbNumberFileSuffix.Name = "tbNumberFileSuffix";
             this.tbNumberFileSuffix.Size = new System.Drawing.Size(139, 23);
             this.tbNumberFileSuffix.TabIndex = 19;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.tbNumberFilePrefix);
             this.groupBox4.Controls.Add(this.label9);
             this.groupBox4.Controls.Add(this.tbNumberFileSuffix);
             this.groupBox4.Controls.Add(this.btnNumberFiles);
             this.groupBox4.Location = new System.Drawing.Point(766, 14);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(151, 127);
+            this.groupBox4.Size = new System.Drawing.Size(151, 172);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 81);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(37, 15);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Prefix";
+            // 
+            // tbNumberFilePrefix
+            // 
+            this.tbNumberFilePrefix.Location = new System.Drawing.Point(6, 99);
+            this.tbNumberFilePrefix.Name = "tbNumberFilePrefix";
+            this.tbNumberFilePrefix.Size = new System.Drawing.Size(138, 23);
+            this.tbNumberFilePrefix.TabIndex = 20;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 80);
+            this.label9.Location = new System.Drawing.Point(6, 125);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(37, 15);
             this.label9.TabIndex = 2;
@@ -390,7 +413,7 @@ namespace CVLabV2
             // 
             // btnRotateAnnotations
             // 
-            this.btnRotateAnnotations.Location = new System.Drawing.Point(766, 326);
+            this.btnRotateAnnotations.Location = new System.Drawing.Point(766, 313);
             this.btnRotateAnnotations.Name = "btnRotateAnnotations";
             this.btnRotateAnnotations.Size = new System.Drawing.Size(151, 41);
             this.btnRotateAnnotations.TabIndex = 19;
@@ -400,7 +423,7 @@ namespace CVLabV2
             // 
             // btnCreateTrainAndTestTxt
             // 
-            this.btnCreateTrainAndTestTxt.Location = new System.Drawing.Point(766, 399);
+            this.btnCreateTrainAndTestTxt.Location = new System.Drawing.Point(766, 381);
             this.btnCreateTrainAndTestTxt.Name = "btnCreateTrainAndTestTxt";
             this.btnCreateTrainAndTestTxt.Size = new System.Drawing.Size(151, 42);
             this.btnCreateTrainAndTestTxt.TabIndex = 20;
@@ -408,11 +431,46 @@ namespace CVLabV2
             this.btnCreateTrainAndTestTxt.UseVisualStyleBackColor = true;
             this.btnCreateTrainAndTestTxt.Click += new System.EventHandler(this.btnCreateTrainAndTestTxt_Click);
             // 
+            // btnAdjustBBoxesToSquaredImage
+            // 
+            this.btnAdjustBBoxesToSquaredImage.Location = new System.Drawing.Point(766, 438);
+            this.btnAdjustBBoxesToSquaredImage.Name = "btnAdjustBBoxesToSquaredImage";
+            this.btnAdjustBBoxesToSquaredImage.Size = new System.Drawing.Size(151, 46);
+            this.btnAdjustBBoxesToSquaredImage.TabIndex = 21;
+            this.btnAdjustBBoxesToSquaredImage.Text = "Adjust BBoxes to squared image";
+            this.btnAdjustBBoxesToSquaredImage.UseVisualStyleBackColor = true;
+            this.btnAdjustBBoxesToSquaredImage.Click += new System.EventHandler(this.btnAdjustBBoxesToSquaredImage_Click);
+            // 
+            // btnSquareAllImages
+            // 
+            this.btnSquareAllImages.Enabled = false;
+            this.btnSquareAllImages.Location = new System.Drawing.Point(18, 438);
+            this.btnSquareAllImages.Name = "btnSquareAllImages";
+            this.btnSquareAllImages.Size = new System.Drawing.Size(158, 28);
+            this.btnSquareAllImages.TabIndex = 22;
+            this.btnSquareAllImages.Text = "Square All Images In Folder";
+            this.btnSquareAllImages.UseVisualStyleBackColor = true;
+            this.btnSquareAllImages.Click += new System.EventHandler(this.btnSquareAllImages_Click);
+            // 
+            // btnGenerateEmptyTxtFiles
+            // 
+            this.btnGenerateEmptyTxtFiles.Enabled = false;
+            this.btnGenerateEmptyTxtFiles.Location = new System.Drawing.Point(766, 502);
+            this.btnGenerateEmptyTxtFiles.Name = "btnGenerateEmptyTxtFiles";
+            this.btnGenerateEmptyTxtFiles.Size = new System.Drawing.Size(151, 36);
+            this.btnGenerateEmptyTxtFiles.TabIndex = 23;
+            this.btnGenerateEmptyTxtFiles.Text = "Generate Empty Txt Files";
+            this.btnGenerateEmptyTxtFiles.UseVisualStyleBackColor = true;
+            this.btnGenerateEmptyTxtFiles.Click += new System.EventHandler(this.btnGenerateEmptyTxtFiles_Click);
+            // 
             // FrmDataPrep
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(929, 588);
+            this.Controls.Add(this.btnGenerateEmptyTxtFiles);
+            this.Controls.Add(this.btnSquareAllImages);
+            this.Controls.Add(this.btnAdjustBBoxesToSquaredImage);
             this.Controls.Add(this.btnCreateTrainAndTestTxt);
             this.Controls.Add(this.btnRotateAnnotations);
             this.Controls.Add(this.groupBox5);
@@ -479,5 +537,10 @@ namespace CVLabV2
         private System.Windows.Forms.Button btnChangeClassInTxt;
         private System.Windows.Forms.Button btnRotateAnnotations;
         private System.Windows.Forms.Button btnCreateTrainAndTestTxt;
+        private System.Windows.Forms.Button btnAdjustBBoxesToSquaredImage;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox tbNumberFilePrefix;
+        private System.Windows.Forms.Button btnSquareAllImages;
+        private System.Windows.Forms.Button btnGenerateEmptyTxtFiles;
     }
 }

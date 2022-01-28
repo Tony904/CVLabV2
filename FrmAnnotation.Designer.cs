@@ -40,6 +40,7 @@ namespace CVLabV2
             this.clbAnnots = new System.Windows.Forms.CheckedListBox();
             this.rtbLastActivity = new System.Windows.Forms.RichTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tbCrossThickness = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cbCursorType = new System.Windows.Forms.ComboBox();
             this.cbUseCustomUpScaling = new System.Windows.Forms.CheckBox();
@@ -72,7 +73,7 @@ namespace CVLabV2
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.tbSrcFile = new System.Windows.Forms.TextBox();
-            this.tbCrossThickness = new System.Windows.Forms.TextBox();
+            this.cbLoadImageScale = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -105,7 +106,7 @@ namespace CVLabV2
             // 
             this.btnLoadImageSrc.Location = new System.Drawing.Point(12, 12);
             this.btnLoadImageSrc.Name = "btnLoadImageSrc";
-            this.btnLoadImageSrc.Size = new System.Drawing.Size(167, 23);
+            this.btnLoadImageSrc.Size = new System.Drawing.Size(109, 23);
             this.btnLoadImageSrc.TabIndex = 1;
             this.btnLoadImageSrc.Text = "Load Image";
             this.btnLoadImageSrc.UseVisualStyleBackColor = true;
@@ -206,6 +207,14 @@ namespace CVLabV2
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
+            // 
+            // tbCrossThickness
+            // 
+            this.tbCrossThickness.Location = new System.Drawing.Point(190, 92);
+            this.tbCrossThickness.Name = "tbCrossThickness";
+            this.tbCrossThickness.Size = new System.Drawing.Size(47, 23);
+            this.tbCrossThickness.TabIndex = 10;
+            this.tbCrossThickness.Text = "1";
             // 
             // label8
             // 
@@ -536,19 +545,26 @@ namespace CVLabV2
             this.tbSrcFile.Size = new System.Drawing.Size(169, 23);
             this.tbSrcFile.TabIndex = 0;
             // 
-            // tbCrossThickness
+            // cbLoadImageScale
             // 
-            this.tbCrossThickness.Location = new System.Drawing.Point(190, 92);
-            this.tbCrossThickness.Name = "tbCrossThickness";
-            this.tbCrossThickness.Size = new System.Drawing.Size(47, 23);
-            this.tbCrossThickness.TabIndex = 10;
-            this.tbCrossThickness.Text = "1";
+            this.cbLoadImageScale.FormattingEnabled = true;
+            this.cbLoadImageScale.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4"});
+            this.cbLoadImageScale.Location = new System.Drawing.Point(127, 12);
+            this.cbLoadImageScale.Name = "cbLoadImageScale";
+            this.cbLoadImageScale.Size = new System.Drawing.Size(52, 23);
+            this.cbLoadImageScale.TabIndex = 19;
+            this.cbLoadImageScale.Text = "1";
             // 
             // FrmAnnotation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1229, 734);
+            this.Controls.Add(this.cbLoadImageScale);
             this.Controls.Add(this.groupBox9);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox1);
@@ -645,6 +661,7 @@ namespace CVLabV2
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbSelectedClbIndex;
         private System.Windows.Forms.TextBox tbCrossThickness;
+        public System.Windows.Forms.ComboBox cbLoadImageScale;
     }
 }
 
