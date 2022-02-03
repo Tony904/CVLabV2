@@ -572,6 +572,7 @@ namespace CVLabV2
                 //List<string[]> BBoxes = new();
                 int uid = 0;
                 bool do_once = true;
+                int scale = Math.Max(1, cbLoadImageScale.SelectedIndex + 1);
                 while ((s = sr.ReadLine()) != null)
                 {
                     if (do_once)
@@ -601,10 +602,10 @@ namespace CVLabV2
                         ht = ht.Trim();
 
                         string lbl = label + "(" + prob + "%)";
-                        int x = Int32.Parse(leftx);
-                        int y = Int32.Parse(topy);
-                        int w = Int32.Parse(wd);
-                        int h = Int32.Parse(ht);
+                        int x = Int32.Parse(leftx) * scale;
+                        int y = Int32.Parse(topy) * scale;
+                        int w = Int32.Parse(wd) * scale;
+                        int h = Int32.Parse(ht) * scale;
                         Rectangle rect = new(x, y, w, h);
                         SrcImage.AddNewAnnotToAnnotsList(rect, lbl);
                     }

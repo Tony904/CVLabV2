@@ -109,14 +109,17 @@ namespace CVLabV2
         public static void SetSrcImageFromStr(string img_fullpath)
         {
             string fname = img_fullpath;
-            _src = new(fname);
+            Image<Bgr, byte> og = new(fname);
+            double scale = (double)Math.Max(1, AnnotationForm.cbLoadImageScale.SelectedIndex + 1);
+            Image<Bgr, byte> resized = og.Resize(scale, Emgu.CV.CvEnum.Inter.Cubic);
+            _src = resized.Clone();
             _src_path = new(fname);
             InitializeMembers();
             STATES.InitializeMembers();
-            AnnotationForm.tbSrcFile.Text = SrcImage.SrcPath.FullPath;
+            AnnotationForm.tbSrcFile.Text = SrcPath.FullPath;
             AnnotationForm.pbMain.Enabled = true;
             AnnotationForm.pbMain.Cursor = AnnotationForm.GetCursorTypeFromComboBox();
-            AnnotationForm.pbMain.Image = SrcImage.Src.ToBitmap();
+            AnnotationForm.pbMain.Image = Src.ToBitmap();
         }
         public static void CheckForExistingTxtFile()
         {
