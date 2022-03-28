@@ -272,6 +272,27 @@ namespace CVLabV2
                 File.WriteAllText(fp.FullPathMinusExt + ".txt", s);
             }
         }
+
+        private void btnPseudoLabelPrep_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new();
+            string save_file = "pseudo_label.txt";
+            ofd.Title = "Select an image in the folder that contains the images you want pseudo labels for.";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                FilePath folder = new(ofd.FileName);
+                string dir = folder.Directory.Remove(folder.Directory.Length - 1);
+                string s = tbPseudoLabelPath.Text;
+                string all_lines = String.Empty;
+                foreach (var file in Directory.EnumerateFiles(dir, "*.jpg"))
+                {
+                    FilePath fp = new(file);
+                    all_lines += s + fp.FileNamePlusExt + "\n";
+                }
+                File.WriteAllText(folder.Directory + save_file, all_lines);
+                rtbActivity.Text = "Created pseudo_label.txt";
+            }
+        }
     }
     public static class DataPrep
     {
@@ -309,8 +330,8 @@ namespace CVLabV2
                 else
                 {
                     int d = (h - w) / 2;
-                    rect.X = d;
-                    rect.Y = 0;
+                    rect.X = 0;
+                    rect.Y = d;
                     rect.Width = w;
                     rect.Height = w;
                 }
